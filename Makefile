@@ -4,7 +4,7 @@ RACO = raco
 all: asquare
 
 asquare:
-	$(CC) asquare.c -o asquare
+	$(CC) asquare.c marray.c -o asquare
 
 .PHONY: clean
 clean:

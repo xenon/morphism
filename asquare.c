@@ -3,45 +3,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-struct morphism_array {
-	int length;
-	int* array;
-};
-
-struct morphism_array* init_morphism_array(void) {
-	int i;
-	char c;
-	struct morphism_array* morphism = malloc(sizeof(struct morphism_array));
-	assert(morphism != NULL);
-	
-	// Read length
-	scanf("%d", &(morphism->length));
-
-	// Malloc length
-	morphism->array = (int *)malloc(morphism->length * sizeof(int));
-	for (i = 0; i < morphism->length; ++i) {
-		// Store the number (we are aligning ASCII back to integers)
-		c = getchar();
-		assert(c != EOF);
-		morphism->array[i] = c - '0';
-	}
-
-	return morphism;
-}
-
-void free_morphism_array(struct morphism_array* morphism) {
-	assert(morphism != NULL);
-	free(morphism->array);
-	free(morphism);
-}
-
-void print_morphism_array(struct morphism_array* morphism) {
-	int i;
-	for (i = 0; i < morphism->length; ++i)
-		putchar(morphism->array[i] + '0');
-
-	putchar('\n');
-}
+#include "marray.h"
 
 int checksum(struct morphism_array* morphism, int start, int end) {
 	int i, sum;
@@ -73,13 +35,27 @@ int
 main
 (int argc, char** argv)
 {
-	struct morphism_array* read_morphism = init_morphism_array();
+	int length, i;
+	char c;
+	struct morphism_array* morphism;
+	
+	scanf("%d", &length);
+
+	morphism = init_morphism_array_only(length);
+
+	for (i = 0; i < morphism->length; ++i) {
+		// Store the number (we are aligning ASCII back to integers)
+		c = getchar();
+		assert(c != EOF);
+		morphism->array[i] = c - '0';
+	}
+	
 	//print_morphism_array(read_morphism);
-	if (check_for_square(read_morphism)) {
+	if (check_for_square(morphism)) {
 		printf("Morphism contains an additive square\n");
 	} else {
 		printf("Morphism does not contain an additive square\n");
 	}
-	free_morphism_array(read_morphism);
+	free_morphism_array(morphism);
 	return 0;
 }
